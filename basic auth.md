@@ -12,6 +12,8 @@
 
 # kubectl get secret basic-auth -o yaml
 
+# we need to change annotations in ingress
+
 
       apiVersion: networking.k8s.io/v1
       kind: Ingress
