@@ -11,7 +11,9 @@
   
   https://helm.sh/docs/intro/install/
   
-    
+   ## Grafana installation using helm 
+
+   
     helm repo add grafana https://grafana.github.io/helm-charts
     
     
@@ -19,6 +21,9 @@
     
     
     helm install grafana grafana/grafana
+
+
+   ## prometheus installation using helm
     
     
     helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -34,6 +39,10 @@
     
     
     helm repo update
+
+
+  ## loki setup
+
     
     
     helm upgrade --install loki grafana/loki-stack
