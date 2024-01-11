@@ -6,13 +6,13 @@
     Re-type new password:
     Adding password for user foo
 
-# kubectl create secret generic basic-auth --from-file=auth
+## kubectl create secret generic basic-auth --from-file=auth
 
 
 
-# kubectl get secret basic-auth -o yaml
+## kubectl get secret basic-auth -o yaml
 
-# we need to change annotations in ingress
+## we need to change annotations in ingress
 
 
       apiVersion: networking.k8s.io/v1
