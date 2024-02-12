@@ -1,5 +1,4 @@
-# Grafana : node(s) had volume node affinity conflict
-
+## Grafana : node(s) had volume node affinity conflict
 ## First we need to check the zone where the pv and the node by describing 
   ```
    kubectl describe nodes | egrep '^Name:|topology.kubernetes.io/zone'
