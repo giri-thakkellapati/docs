@@ -1,10 +1,6 @@
-   ## container application monitoring
-   
-   
-   ### First we need to create pvc
-### pvc.yaml
-
-    
+## container application monitoring   
+### First we need to create pvc
+### pvc.yaml    
  ```
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -17,16 +13,11 @@ spec:
   resources:
     requests:
       storage: 1Gi
-```
-	      
+```	      
 ### Then we need to create configmap file for loki
 ### Add the loki endpoint in configmap.
-### add the logpath and file name as *.log
-
-    
-    
+### add the logpath and file name as *.log 
 ### configmap.yaml
-
 ```     
 apiVersion: v1
 kind: ConfigMap
@@ -55,21 +46,11 @@ data:
 	    labels:
 	      job: tomcat-access
 	      __path__: /tmp/access_log.log    
-```
- 
-		      
-		      
-	      
+```	      
 ### we need to edit the deployment file of application
 ### Added the promtail deployment in the same application deployment.
-### Then created the volume mounts
-
-    
-    
-    
-    
-### deployment.yaml
-    
+### Then created the volume mounts    
+### deployment.yaml    
 ```        
 apiVersion: apps/v1
 kind: Deployment
@@ -121,8 +102,6 @@ spec:
       - name: shared-logs
 	persistentVolumeClaim:
 	  claimName: beatsapi-logs
-
-
 
 
 ---
