@@ -1,16 +1,16 @@
-## First install nginx in vm
+### First install nginx in vm
 
     cd /etc/nginx
 
-## on ubuntu
+### on ubuntu
     sudo apt install apache2-utils
 
-## on centos
+### on centos
     sudo yum install httpd-tools
 
     htpasswd -c /etc/nginx/.htpasswd admin
 
-## we need to add the ip of prometheus or loki
+### we need to add the ip of prometheus or loki
 
     
         sudo nano /etc/nginx/siteserver {
@@ -27,11 +27,11 @@
         ...
     }s-enabled/prometheus
 
-## Save and test the new configuration
+### Save and test the new configuration
 
     nginx -t
 
-# Restart Nginx
+### Restart Nginx
 
       sudo service nginx restart
       
