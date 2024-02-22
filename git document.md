@@ -17,87 +17,97 @@
  ```
  ## Note 
  while pushing the changes from local to github if we face issue as below
- ![GitHub Logo](/images/logo.png)
-Format: ![Alt Text](url)
-
- 
+ ![GitHub Logo](/images/screenshot.png)
+  ## Run the following commands
  ```
  git pull --rebase origin <branch name>
  git push origin <branch name>
  ```
- 
- 
- ## Run the following commands
- 
  ## creating CICD
- ###Create a workflow in the repo with this setup .github/workflows/filename.yaml
+ - Create a workflow in the repo with this setup --.github/workflows/filename.yaml
  
  ### filename.yaml script
-
-
-
 ```
-	name: CI/CD for .NET
+name: CI/CD for .NET
+on:
+  push:
+    branches:
+      - staging
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0'
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build
+    - name: Test
+      run: dotnet test
+  deploy-staging:
+    runs-on: ubuntu-latest
+    #needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/staging' && 'workflow_dispatch'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0'
+    - name: Publish
+      run: dotnet publish -c Release -o ./publish
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: zelar12
+        #slot-name: <slot-name>
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROFILE_STAGING }}
+        package: ./publish
+  deploy-Release:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    #if: github.event_name == 'push' && github.ref == 'refs/heads/Release' && 'workflow_dispatch'
+    steps:
+    - uses: trstringer/manual-approval@v1
+      with:
+       secret: ${{ secrets.GITHUBTOKEN }}
+       approvers: rinizelar
+       minimum-approvals: 1
+       issue-title: "Deploying v9.0.0 from feature to main"
+       issue-body: "Please approve or deny the deployment of version v9.0.0"
+       exclude-workflow-initiator-as-approver: false
+       additional-approved-words: ''
+       additional-denied-words: ''
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0'
+    - name: Publish
+      run: dotnet publish -c Release -o ./publish
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: zelar11
+        #slot-name: <slot-name>
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROFILE }}
+        package: ./publish	    
+``` 
+ - Add the app name and secret variable in yaml file
+ - we need to add secrect of azure app service in github in secrets.
 
-	on:
-	  push:
-	    branches:
-	      - main
-	  pull_request:
-	    branches:
-	      - '*'
-
-	jobs:
-	  CI:
-	    runs-on: ubuntu-latest
-	    if: github.event_name == 'pull'
-	    steps:
-	    - name: Checkout code
-	      uses: actions/checkout@v2
-	      
-	    - name: Setup .NET
-	      uses: actions/setup-dotnet@v1
-	      with:
-		dotnet-version: '6.0'
-		
-	    - name: Restore dependencies
-	      run: dotnet restore
-	      
-	    - name: Build
-	      run: dotnet build
-	      
-	    - name: Test
-	      run: dotnet test
-	      
-	  CD:
-	    runs-on: ubuntu-latest
-	    #needs: build
-	    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-	    
-	    steps:
-	    - name: Checkout code
-	      uses: actions/checkout@v2
-	      
-	    - name: Setup .NET
-	      uses: actions/setup-dotnet@v1
-	      with:
-		dotnet-version: '6.0'
-		
-	    - name: Publish
-	      run: dotnet publish -c Release -o ./publish
-	      
-	    - name: Deploy to Azure Web App
-	      uses: azure/webapps-deploy@v2
-	      with:
-		app-name: zelar11
-		publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROFILE }}
-		package: ./publish
-```
- 
- 
- Add the app name and secret in yaml file
- we need to add screct for azure app service in github in secrets.
-
-# Note 
-If Pull request is raised then CI will run
-Once the PR is merged to main/master branch then CD will run and application will be deployed in azure app service
+### Note 
+- If Pull request is raised then CI will run everytime
+- Once the PR is merged to main/master branch then CD will run and application will be deployed in azure app service
