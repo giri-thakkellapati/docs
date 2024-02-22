@@ -1,30 +1,25 @@
 # CICD for DOTNET APPLICATION
-
- ### First we need to create a organization in Github
- ### Assign the members to the organization with necessary permissions
- ### create a repo 
+- First we need to create a organization in Github
+- Assign the members to the organization with necessary permissions
+- create a repo 
  ### Clone the repo into local machine using ssh
  ```
  git clone <ssh url>
  ```
- ### Copy source code to the cloned repo which is present in local machine
- ### Using the following commands to push the source code to github
+- Copy source code to the cloned repo which is present in local machine
+- Using the following commands to push the source code to github
  ```
  cd <repo name>
  git add .
- ```
- ```
  git status
- ```
  git commit -m "commit message"
- ```
- ```
  git push origin <branch name>
  ```
  ## Note 
  while pushing the changes from local to github if we face issue as below
- 
- /home/giri/Pictures/Screenshots/Screenshot from 2024-02-22 11-21-38.png
+ ![GitHub Logo](/images/logo.png)
+Format: ![Alt Text](url)
+
  
  ```
  git pull --rebase origin <branch name>
@@ -101,9 +96,8 @@
  
  
  Add the app name and secret in yaml file
- we need to add screct for azure app service in github in secrets. 
- 
- ### Note 
- 
-  If Pull request is raised then CI will run
-  Once the PR is merged to main/master branch then CD will run and application will be deployed in azure app service
+ we need to add screct for azure app service in github in secrets.
+
+# Note 
+If Pull request is raised then CI will run
+Once the PR is merged to main/master branch then CD will run and application will be deployed in azure app service
