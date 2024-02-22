@@ -1,4 +1,4 @@
-# CICD for DOTNET APPLICATION
+## CICD for DOTNET APPLICATION DEPLOYED IN AZURE APP SERVICE
 - First we need to create a organization in Github
 - Assign the members to the organization with necessary permissions
 - create a repo 
@@ -16,13 +16,19 @@
  git push origin <branch name>
  ```
  ## Note 
- while pushing the changes from local to github if we face issue as below
+ - while pushing the changes from local to github if we face issue as below
  ![GitHub Logo](/images/screenshot.png)
   ## Run the following commands
  ```
  git pull --rebase origin <branch name>
  git push origin <branch name>
  ```
+## creating azure app service
+ - Login to Azure cloud
+ - Need to have subscription
+ - Now go to azure app services and create a application according to the requirement
+ - Download the publish profile for authentication with github
+ - we have an option to add custom domain in app service.
  ## creating CICD
  - Create a workflow in the repo with this setup --.github/workflows/filename.yaml
  
@@ -104,10 +110,9 @@ jobs:
         #slot-name: <slot-name>
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROFILE }}
         package: ./publish	    
-``` 
+```
+### Note:
+ - If Pull request is raised then CI will run everytime
+ - Here we created manual approval when the code is merged to production it will ask for approval
  - Add the app name and secret variable in yaml file
- - we need to add secrect of azure app service in github in secrets.
-
-### Note 
-- If Pull request is raised then CI will run everytime
-- Once the PR is merged to main/master branch then CD will run and application will be deployed in azure app service
+ - we need to add secrect of azure app service in github secrets.
