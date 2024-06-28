@@ -25,7 +25,7 @@ spec:
     kind: Managed 
     diskName: grafana-test 
     diskURI: <DiskURL> 
-  storageClassName: standard 
+  storageClassName: default 
 ```
 
 ### Now create a pvc  in particular namespace
@@ -41,7 +41,7 @@ spec:
   resources: 
     requests: 
       storage: 10Gi 
-  storageClassName: "standard" 
+  storageClassName: "default" 
   volumeName: grafana-pv
 ```
 ### Delete the old pvc
